@@ -438,11 +438,16 @@
     <div class="file-upload" id="uploadSection" style="display: none;">
         <h3 style="margin-bottom: 15px;">Upload JLPT Database</h3>
         <label class="upload-label" for="fileInput">
-            Choose JSON File
+            📁 Choose JSON File
         </label>
-        <input type="file" id="fileInput" accept=".json" onchange="loadDatabase(event)">
+        <input type="file" id="fileInput" accept="application/json,.json" onchange="loadDatabase(event)">
         <p style="margin-top: 10px; color: #999; font-size: 14px;">
-            Upload your japanese_vocabulary.json file
+            ✅ Only JSON files (.json) are accepted<br>
+            ❌ Photos and videos cannot be uploaded
+        </p>
+        <p style="margin-top: 5px; color: #666; font-size: 13px;">
+            JSON file විතරක් upload කරන්න පුළුවන්<br>
+            Photos හා videos upload වෙන්නේ නෑ
         </p>
     </div>
 
@@ -621,6 +626,20 @@
             const file = event.target.files[0];
             if (!file) return;
 
+            // Check file type
+            if (!file.name.endsWith('.json') && file.type !== 'application/json') {
+                alert('Please upload only JSON files! (.json)');
+                event.target.value = ''; // Clear the input
+                return;
+            }
+
+            // Check file size (limit to 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File is too large! Please upload a file smaller than 10MB.');
+                event.target.value = '';
+                return;
+            }
+
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
@@ -634,11 +653,12 @@
                         updateCategorySelect();
                         resetQuiz();
                     } else {
-                        alert('Invalid database format!');
+                        alert('Invalid database format! Please check your JSON structure.');
                     }
                 } catch (error) {
-                    alert('Error loading database: ' + error.message);
+                    alert('Error loading database: Invalid JSON file. Please check the file format.');
                 }
+                event.target.value = ''; // Clear the input for next upload
             };
             reader.readAsText(file);
         }
