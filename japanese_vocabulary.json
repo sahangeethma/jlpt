@@ -1,0 +1,82 @@
+{
+  "japanese_vocabulary": {
+    "nouns": [
+      {"kanji": "油", "hiragana": "あぶら", "meaning_en": "oil", "meaning_si": "තෙල්"},
+      {"kanji": "愛", "hiragana": "あい", "meaning_en": "love, affection, care", "meaning_si": "ආදරය, සැලකිල්ල"},
+      {"kanji": "愛情", "hiragana": "あいじょう", "meaning_en": "love, affection", "meaning_si": "ආදරය, ඇලීම"},
+      {"kanji": "相手", "hiragana": "あいて", "meaning_en": "companion, partner", "meaning_si": "සහකරු, ප්‍රතිවාදියා"},
+      {"kanji": "合図", "hiragana": "あいず", "meaning_en": "sign, signal", "meaning_si": "සංඥාව"},
+      {"kanji": "明かり", "hiragana": "あかり", "meaning_en": "light, illumination, glow", "meaning_si": "ආලෝකය"},
+      {"kanji": "空き", "hiragana": "あき", "meaning_en": "space, room, emptiness", "meaning_si": "හිස් තැන, අවකාශය"},
+      {"kanji": "空き家", "hiragana": "あきや", "meaning_en": "vacant house, unoccupied house", "meaning_si": "හිස් නිවස"},
+      {"kanji": "汗", "hiragana": "あせ", "meaning_en": "sweat, perspiration", "meaning_si": "වියළි"},
+      {"kanji": "穴", "hiragana": "あな", "meaning_en": "hole, deficit, vacancy", "meaning_si": "රිද්ද, හිඩැස"},
+      {"kanji": "嵐", "hiragana": "あらし", "meaning_en": "storm, tempest", "meaning_si": "ගිගුරුම් සහිත වැස්ස"},
+      {"kanji": "悪魔", "hiragana": "あくま", "meaning_en": "demon, evil", "meaning_si": "යක්ෂයා, දුෂ්ට"},
+      {"kanji": "握手", "hiragana": "あくしゅ", "meaning_en": "handshake", "meaning_si": "අත් සංග්‍රහය"},
+      {"kanji": "案", "hiragana": "あん", "meaning_en": "idea, plan, thought", "meaning_si": "අදහස, සැලැස්ම"},
+      {"kanji": "暗記", "hiragana": "あんき", "meaning_en": "memorization", "meaning_si": "මතකයට ගැනීම"},
+      {"kanji": "安定", "hiragana": "あんてい", "meaning_en": "stability, equilibrium", "meaning_si": "ස්ථාවරත්වය"},
+      {"kanji": "泡", "hiragana": "あわ", "meaning_en": "bubble, foam", "meaning_si": "බුබුලු"},
+      {"kanji": "哀れ", "hiragana": "あわれ", "meaning_en": "pity, sorrow, grief", "meaning_si": "කනගාටුව, දුක"},
+      {"kanji": "跡", "hiragana": "あと", "meaning_en": "trace, tracks, mark", "meaning_si": "හෝඩුවාව, සලකුණ"},
+      {"kanji": "集まり", "hiragana": "あつまり", "meaning_en": "gathering, meeting", "meaning_si": "සමුළුව, රැස්වීම"},
+      {"kanji": "誤り", "hiragana": "あやまり", "meaning_en": "error, mistake, slip", "meaning_si": "දෝෂය, වැරදීම"}
+    ],
+    
+    "adjectives": [
+      {"kanji": "明らか", "hiragana": "あきらか", "meaning_en": "obvious, evident, clear", "meaning_si": "පැහැදිලි, ස්පෂ්ට"},
+      {"kanji": "粗い", "hiragana": "あらい", "meaning_en": "coarse, rough", "meaning_si": "රළු, ඝන"},
+      {"kanji": "新た", "hiragana": "あらた", "meaning_en": "new, fresh, novel", "meaning_si": "අලුත්, නව"},
+      {"kanji": "有らゆる", "hiragana": "あらゆる", "meaning_en": "all, every", "meaning_si": "සියලු"},
+      {"kanji": "力強い", "hiragana": "ちからづよい", "meaning_en": "powerful, strong", "meaning_si": "බලවත්, ශක්තිමත්"},
+      {"kanji": "だるい", "hiragana": "だるい", "meaning_en": "sluggish, bothersome", "meaning_si": "සෙමෙන්, බරපතල"}
+    ],
+    
+    "verbs": [
+      {"kanji": "愛する", "hiragana": "あいする", "meaning_en": "to love", "meaning_si": "ආදරය කිරීමට"},
+      {"kanji": "明ける", "hiragana": "あける", "meaning_en": "to dawn, to end (of a period, season)", "meaning_si": "අලුයම වීමට, අවසන් වීමට"},
+      {"kanji": "諦める", "hiragana": "あきらめる", "meaning_en": "to give up, to abandon", "meaning_si": "අත්හැරීමට, ඉවතලීමට"},
+      {"kanji": "飽きる", "hiragana": "あきる", "meaning_en": "to get tired of", "meaning_si": "කම්මැලි වීමට"},
+      {"kanji": "余る", "hiragana": "あまる", "meaning_en": "to remain, to be left over", "meaning_si": "ඉතිරි වීමට"},
+      {"kanji": "編む", "hiragana": "あむ", "meaning_en": "to knit, to braid", "meaning_si": "හොඩි ගැසීමට"},
+      {"kanji": "現れる", "hiragana": "あらわれる", "meaning_en": "to appear, to come in sight", "meaning_si": "පෙනී යාමට"},
+      {"kanji": "表す", "hiragana": "あらわす", "meaning_en": "to represent, to show, to display", "meaning_si": "පෙන්වීමට"},
+      {"kanji": "与える", "hiragana": "あたえる", "meaning_en": "to give, to bestow", "meaning_si": "ලබා දීමට"},
+      {"kanji": "当たる", "hiragana": "あたる", "meaning_en": "to be hit, to strike", "meaning_si": "පහර දීමට"},
+      {"kanji": "温める", "hiragana": "あたためる", "meaning_en": "to warm, to heat", "meaning_si": "උණුසුම් කිරීමට"},
+      {"kanji": "扱う", "hiragana": "あつかう", "meaning_en": "to deal with, to treat", "meaning_si": "හැසිරවීමට"},
+      {"kanji": "慌てる", "hiragana": "あわてる", "meaning_en": "to panic, to rush", "meaning_si": "තැවුල් වීමට"},
+      {"kanji": "合わせる", "hiragana": "あわせる", "meaning_en": "to match, to join together", "meaning_si": "ගැලපීමට"},
+      {"kanji": "預ける", "hiragana": "あずける", "meaning_en": "to give into custody", "meaning_si": "භාර දීමට"}
+    ],
+    
+    "adverbs": [
+      {"kanji": "相変わらず", "hiragana": "あいかわらず", "meaning_en": "as ever, as usual, the same", "meaning_si": "සැම විටම, පුරුදු පරිදි"},
+      {"kanji": "生憎", "hiragana": "あいにく", "meaning_en": "unfortunately; sorry, but...", "meaning_si": "අවාසනාවට, කණගාටුයි නමුත්"},
+      {"kanji": "だんだん", "hiragana": "だんだん", "meaning_en": "gradually, little by little", "meaning_si": "ක්‍රමයෙන්, ටිකින් ටික"},
+      {"kanji": "どきどき", "hiragana": "どきどき", "meaning_en": "to beat fast (of one's heart)", "meaning_si": "හදවත ගැසීම"},
+      {"kanji": "どうか", "hiragana": "どうか", "meaning_en": "please, one way or another", "meaning_si": "කරුණාකර, කෙසේ හෝ"},
+      {"kanji": "どうしても", "hiragana": "どうしても", "meaning_en": "by all means, at any cost", "meaning_si": "යම් ආකාරයකින් හෝ, කුමන අයුරකින් හෝ"},
+      {"kanji": "がっかり", "hiragana": "がっかり", "meaning_en": "feel disappointed", "meaning_si": "නිෂ්ඵල බවක් දැනෙනවා"},
+      {"kanji": "ぼんやり", "hiragana": "ぼんやり", "meaning_en": "absentmindedly", "meaning_si": "මනසින් ඈත්ව"},
+      {"kanji": "ぶらぶら", "hiragana": "ぶらぶら", "meaning_en": "strolling, wandering", "meaning_si": "විසිර ඇවිදීම"},
+      {"kanji": "ぐっすり", "hiragana": "ぐっすり", "meaning_en": "sound sleep", "meaning_si": "ගැඹුරු නින්ද"},
+      {"kanji": "ほっと", "hiragana": "ほっと", "meaning_en": "with a feeling of relief", "meaning_si": "සහනයක් දැනෙනවා"},
+      {"kanji": "いつの間にか", "hiragana": "いつのまにか", "meaning_en": "before one knows", "meaning_si": "දැනගැනීමට පෙර"},
+      {"kanji": "うっかり", "hiragana": "うっかり", "meaning_en": "carelessly, thoughtlessly", "meaning_si": "අමනසින්"}
+    ],
+    
+    "phrases_and_expressions": [
+      {"kanji": "馬鹿", "hiragana": "ばか", "meaning_en": "fool, idiot", "meaning_si": "මෝඩ, අඥාන"},
+      {"kanji": "びっくり", "hiragana": "びっくり", "meaning_en": "to be surprised", "meaning_si": "විස්මයට පත්වීම"},
+      {"kanji": "ばらばら", "hiragana": "ばらばら", "meaning_en": "scattered, in pieces", "meaning_si": "විසිර ගිය, කැබලි වශයෙන්"},
+      {"kanji": "別々", "hiragana": "べつべつ", "meaning_en": "separately, individually", "meaning_si": "වෙන වෙනම"},
+      {"kanji": "無沙汰", "hiragana": "ぶさた", "meaning_en": "not writing or contacting for a while", "meaning_si": "බොහෝ කලක සම්බන්ධතාවක් නැතිව"},
+      {"kanji": "そっくり", "hiragana": "そっくり", "meaning_en": "all, together, just like", "meaning_si": "සියල්ලම, හරියටම"},
+      {"kanji": "ぴったり", "hiragana": "ぴったり", "meaning_en": "exactly, tightly", "meaning_si": "හරියටම, තදින්"},
+      {"kanji": "ぺらぺら", "hiragana": "ぺらぺら", "meaning_en": "fluently", "meaning_si": "සරලව, නිදහසේ"},
+      {"kanji": "さっぱり", "hiragana": "さっぱり", "meaning_en": "feeling refreshed", "meaning_si": "සැරසීමක් දැනෙනවා"}
+    ]
+  }
+}
