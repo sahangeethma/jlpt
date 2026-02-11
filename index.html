@@ -452,6 +452,17 @@
     </div>
 
     <div class="category-filter">
+        <div class="filter-title">🎌 JLPT Level</div>
+        <select class="category-select" id="levelSelect" onchange="changeLevel()">
+            <option value="all">All Levels</option>
+        </select>
+        <div class="category-stats" id="levelStats">
+            <span id="levelWords">0 words</span>
+            <span id="levelProgress">0% completed</span>
+        </div>
+    </div>
+
+    <div class="category-filter">
         <div class="filter-title">📚 Category Filter</div>
         <select class="category-select" id="categorySelect" onchange="changeCategory()">
             <option value="all">All Categories</option>
@@ -504,87 +515,93 @@
     </div>
 
     <script>
-        // Sample JLPT Database
+        // Sample JLPT Database with levels
         let sampleData = {
-            "japanese_vocabulary": {
-                "nouns": [
-                    {
-                        "kanji": "学生",
-                        "hiragana": "がくせい",
-                        "meaning_en": "Student",
-                        "meaning_si": "ශිෂ්‍යයා"
-                    },
-                    {
-                        "kanji": "本",
-                        "hiragana": "ほん",
-                        "meaning_en": "Book",
-                        "meaning_si": "පොත"
-                    },
-                    {
-                        "kanji": "先生",
-                        "hiragana": "せんせい",
-                        "meaning_en": "Teacher",
-                        "meaning_si": "ගුරුවරයා"
-                    },
-                    {
-                        "kanji": "学校",
-                        "hiragana": "がっこう",
-                        "meaning_en": "School",
-                        "meaning_si": "පාසල"
-                    }
-                ],
-                "verbs": [
-                    {
-                        "kanji": "食べる",
-                        "hiragana": "たべる",
-                        "meaning_en": "to eat",
-                        "meaning_si": "කනවා"
-                    },
-                    {
-                        "kanji": "見る",
-                        "hiragana": "みる",
-                        "meaning_en": "to see",
-                        "meaning_si": "බලනවා"
-                    },
-                    {
-                        "kanji": "書く",
-                        "hiragana": "かく",
-                        "meaning_en": "to write",
-                        "meaning_si": "ලියනවා"
-                    },
-                    {
-                        "kanji": "読む",
-                        "hiragana": "よむ",
-                        "meaning_en": "to read",
-                        "meaning_si": "කියවනවා"
-                    }
-                ],
-                "adjectives": [
-                    {
-                        "kanji": "大きい",
-                        "hiragana": "おおきい",
-                        "meaning_en": "big",
-                        "meaning_si": "විශාල"
-                    },
-                    {
-                        "kanji": "小さい",
-                        "hiragana": "ちいさい",
-                        "meaning_en": "small",
-                        "meaning_si": "කුඩා"
-                    },
-                    {
-                        "kanji": "新しい",
-                        "hiragana": "あたらしい",
-                        "meaning_en": "new",
-                        "meaning_si": "අලුත්"
-                    },
-                    {
-                        "kanji": "古い",
-                        "hiragana": "ふるい",
-                        "meaning_en": "old",
-                        "meaning_si": "පරණ"
-                    }
-                ]
+            "n5": {
+                "japanese_vocabulary": {
+                    "nouns": [
+                        {
+                            "kanji": "学生",
+                            "hiragana": "がくせい",
+                            "meaning_en": "Student",
+                            "meaning_si": "ශිෂ්‍යයා"
+                        },
+                        {
+                            "kanji": "本",
+                            "hiragana": "ほん",
+                            "meaning_en": "Book",
+                            "meaning_si": "පොත"
+                        }
+                    ],
+                    "verbs": [
+                        {
+                            "kanji": "食べる",
+                            "hiragana": "たべる",
+                            "meaning_en": "to eat",
+                            "meaning_si": "කනවා"
+                        },
+                        {
+                            "kanji": "見る",
+                            "hiragana": "みる",
+                            "meaning_en": "to see",
+                            "meaning_si": "බලනවා"
+                        }
+                    ],
+                    "adjectives": [
+                        {
+                            "kanji": "大きい",
+                            "hiragana": "おおきい",
+                            "meaning_en": "big",
+                            "meaning_si": "විශාල"
+                        },
+                        {
+                            "kanji": "小さい",
+                            "hiragana": "ちいさい",
+                            "meaning_en": "small",
+                            "meaning_si": "කුඩා"
+                        }
+                    ]
+                }
+            },
+            "n4": {
+                "japanese_vocabulary": {
+                    "nouns": [
+                        {
+                            "kanji": "会社",
+                            "hiragana": "かいしゃ",
+                            "meaning_en": "Company",
+                            "meaning_si": "සමාගම"
+                        }
+                    ],
+                    "verbs": [
+                        {
+                            "kanji": "働く",
+                            "hiragana": "はたらく",
+                            "meaning_en": "to work",
+                            "meaning_si": "වැඩ කරනවා"
+                        }
+                    ]
+                }
+            },
+            "n3": {
+                "japanese_vocabulary": {
+                    "nouns": [
+                        {
+                            "kanji": "環境",
+                            "hiragana": "かんきょう",
+                            "meaning_en": "environment",
+                            "meaning_si": "පරිසරය"
+                        }
+                    ],
+                    "verbs": [
+                        {
+                            "kanji": "確認する",
+                            "hiragana": "かくにんする",
+                            "meaning_en": "to confirm",
+                            "meaning_si": "තහවුරු කරනවා"
+                        }
+                    ]
+                }
             }
         };
 
@@ -596,6 +613,7 @@
         let wrongAnswersList = [];
         let answeredQuestions = [];
         let currentCategory = 'all';
+        let currentLevel = 'all';
         let testHistory = [];
         let sessionStartTime = null;
 
@@ -603,7 +621,30 @@
         function convertDatabase(data) {
             const flatDb = [];
             
-            if (data.japanese_vocabulary) {
+            // Check if data has level structure (n5, n4, n3, etc.)
+            const hasLevels = data.n5 || data.n4 || data.n3 || data.n2 || data.n1;
+            
+            if (hasLevels) {
+                // New format with levels
+                ['n5', 'n4', 'n3', 'n2', 'n1'].forEach(level => {
+                    if (data[level] && data[level].japanese_vocabulary) {
+                        Object.keys(data[level].japanese_vocabulary).forEach(category => {
+                            const items = data[level].japanese_vocabulary[category];
+                            items.forEach(item => {
+                                flatDb.push({
+                                    kanji: item.kanji,
+                                    hiragana: item.hiragana,
+                                    meaning_en: item.meaning_en,
+                                    meaning_si: item.meaning_si,
+                                    category: category,
+                                    level: level
+                                });
+                            });
+                        });
+                    }
+                });
+            } else if (data.japanese_vocabulary) {
+                // Old format without levels
                 Object.keys(data.japanese_vocabulary).forEach(category => {
                     const items = data.japanese_vocabulary[category];
                     items.forEach(item => {
@@ -612,7 +653,8 @@
                             hiragana: item.hiragana,
                             meaning_en: item.meaning_en,
                             meaning_si: item.meaning_si,
-                            category: category
+                            category: category,
+                            level: 'unknown'
                         });
                     });
                 });
@@ -650,6 +692,7 @@
                         localStorage.setItem('jlptDatabase', JSON.stringify(database));
                         alert(`Database loaded successfully! ${database.length} words loaded.`);
                         document.getElementById('uploadSection').style.display = 'none';
+                        updateLevelSelect();
                         updateCategorySelect();
                         resetQuiz();
                     } else {
@@ -668,12 +711,58 @@
             upload.style.display = upload.style.display === 'none' ? 'block' : 'none';
         }
 
+        function updateLevelSelect() {
+            const levels = ['all', ...new Set(database.map(item => item.level).filter(l => l !== 'unknown'))].sort();
+            const select = document.getElementById('levelSelect');
+            select.innerHTML = levels.map(level => {
+                const displayName = level === 'all' ? 'All Levels' : level.toUpperCase();
+                return `<option value="${level}">${displayName}</option>`;
+            }).join('');
+            updateLevelStats();
+        }
+
+        function changeLevel() {
+            currentLevel = document.getElementById('levelSelect').value;
+            answeredQuestions = [];
+            saveProgress();
+            updateLevelStats();
+            updateCategorySelect();
+            loadQuestion();
+        }
+
+        function updateLevelStats() {
+            const filtered = getFilteredByLevel();
+            const answeredInLevel = answeredQuestions.filter(idx => {
+                const item = database[idx];
+                return currentLevel === 'all' || item.level === currentLevel;
+            });
+            
+            document.getElementById('levelWords').textContent = `${filtered.length} words`;
+            const progress = filtered.length > 0 ? ((answeredInLevel.length / filtered.length) * 100).toFixed(0) : 0;
+            document.getElementById('levelProgress').textContent = `${progress}% completed`;
+        }
+
+        function getFilteredByLevel() {
+            if (currentLevel === 'all') {
+                return database;
+            }
+            return database.filter(item => item.level === currentLevel);
+        }
+
         function updateCategorySelect() {
-            const categories = ['all', ...new Set(database.map(item => item.category))];
+            const levelFiltered = getFilteredByLevel();
+            const categories = ['all', ...new Set(levelFiltered.map(item => item.category))];
             const select = document.getElementById('categorySelect');
             select.innerHTML = categories.map(cat => 
                 `<option value="${cat}">${cat.charAt(0).toUpperCase() + cat.slice(1)}</option>`
             ).join('');
+            
+            // Reset category to 'all' if current category doesn't exist in new level
+            if (!categories.includes(currentCategory)) {
+                currentCategory = 'all';
+                select.value = 'all';
+            }
+            
             updateCategoryStats();
         }
 
@@ -689,7 +778,9 @@
             const filtered = getFilteredDatabase();
             const answeredInCategory = answeredQuestions.filter(idx => {
                 const item = database[idx];
-                return currentCategory === 'all' || item.category === currentCategory;
+                const levelMatch = currentLevel === 'all' || item.level === currentLevel;
+                const categoryMatch = currentCategory === 'all' || item.category === currentCategory;
+                return levelMatch && categoryMatch;
             });
             
             document.getElementById('categoryWords').textContent = `${filtered.length} words`;
@@ -698,10 +789,19 @@
         }
 
         function getFilteredDatabase() {
-            if (currentCategory === 'all') {
-                return database;
+            let filtered = database;
+            
+            // Filter by level
+            if (currentLevel !== 'all') {
+                filtered = filtered.filter(item => item.level === currentLevel);
             }
-            return database.filter(item => item.category === currentCategory);
+            
+            // Filter by category
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(item => item.category === currentCategory);
+            }
+            
+            return filtered;
         }
 
         // Initialize
@@ -721,7 +821,8 @@
                 testHistory = JSON.parse(savedHistory);
             }
 
-            // Update category select
+            // Update level and category selects
+            updateLevelSelect();
             updateCategorySelect();
             
             // Load saved progress
@@ -742,7 +843,9 @@
                 totalQuestions = data.totalQuestions || 0;
                 answeredQuestions = data.answeredQuestions || [];
                 currentCategory = data.currentCategory || 'all';
+                currentLevel = data.currentLevel || 'all';
                 document.getElementById('categorySelect').value = currentCategory;
+                document.getElementById('levelSelect').value = currentLevel;
             }
 
             const savedWrong = localStorage.getItem('jlptWrongAnswers');
@@ -751,6 +854,7 @@
             }
 
             updateScore();
+            updateLevelStats();
             updateCategoryStats();
         }
 
@@ -759,7 +863,8 @@
                 correctAnswers,
                 totalQuestions,
                 answeredQuestions,
-                currentCategory
+                currentCategory,
+                currentLevel
             }));
 
             localStorage.setItem('jlptWrongAnswers', JSON.stringify(wrongAnswersList));
@@ -769,21 +874,24 @@
             const filtered = getFilteredDatabase();
             
             if (filtered.length === 0) {
-                alert('No words in this category!');
+                alert('No words in this level/category combination!');
                 return;
             }
 
-            // Get unanswered questions in current category
+            // Get unanswered questions in current filters
             const filteredIndices = filtered.map(item => database.indexOf(item));
             const unanswered = filteredIndices.filter(idx => !answeredQuestions.includes(idx));
 
             if (unanswered.length === 0) {
-                // Reset category progress
+                // Reset progress for current filters
                 answeredQuestions = answeredQuestions.filter(idx => {
                     const item = database[idx];
-                    return currentCategory !== 'all' && item.category !== currentCategory;
+                    const levelMatch = currentLevel === 'all' || item.level === currentLevel;
+                    const categoryMatch = currentCategory === 'all' || item.category === currentCategory;
+                    return !(levelMatch && categoryMatch);
                 });
                 saveProgress();
+                updateLevelStats();
                 updateCategoryStats();
             }
 
@@ -871,6 +979,7 @@
                     correctAnswer_si: currentQuestion.meaning_si,
                     correctAnswer_en: currentQuestion.meaning_en,
                     category: currentQuestion.category,
+                    level: currentQuestion.level,
                     timestamp: new Date().toISOString()
                 });
             }
@@ -883,11 +992,12 @@
             answeredQuestions.push(currentIndex);
 
             updateScore();
+            updateLevelStats();
             updateCategoryStats();
             saveProgress();
 
             // Next question
-            const delay = isCorrect ? 700 : 2000;
+            const delay = isCorrect ? 1000 : 3000;
             setTimeout(() => {
                 loadQuestion();
             }, delay);
@@ -926,30 +1036,42 @@
                 return;
             }
 
-            // Group by category
-            const byCategory = {};
+            // Group by level, then by category
+            const byLevel = {};
             wrongAnswersList.forEach(item => {
+                const level = item.level || 'unknown';
+                if (!byLevel[level]) byLevel[level] = {};
+                
                 const cat = item.category || 'uncategorized';
-                if (!byCategory[cat]) byCategory[cat] = [];
-                byCategory[cat].push(item);
+                if (!byLevel[level][cat]) byLevel[level][cat] = [];
+                byLevel[level][cat].push(item);
             });
 
-            Object.keys(byCategory).forEach(cat => {
-                const catTitle = document.createElement('h4');
-                catTitle.style.marginTop = '20px';
-                catTitle.style.marginBottom = '10px';
-                catTitle.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
-                list.appendChild(catTitle);
+            Object.keys(byLevel).sort().forEach(level => {
+                const levelTitle = document.createElement('h3');
+                levelTitle.style.marginTop = '20px';
+                levelTitle.style.marginBottom = '10px';
+                levelTitle.style.color = '#2196F3';
+                levelTitle.textContent = level.toUpperCase();
+                list.appendChild(levelTitle);
 
-                byCategory[cat].forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'wrong-item';
-                    div.innerHTML = `
-                        <div class="wrong-question">Qz: ${item.kanji} (${item.hiragana})</div>
-                        <div class="wrong-answer incorrect">✗ ${item.wrongAnswer_si} (${item.wrongAnswer_en})</div>
-                        <div class="wrong-answer correct">✓ ${item.correctAnswer_si} (${item.correctAnswer_en})</div>
-                    `;
-                    list.appendChild(div);
+                Object.keys(byLevel[level]).forEach(cat => {
+                    const catTitle = document.createElement('h4');
+                    catTitle.style.marginTop = '15px';
+                    catTitle.style.marginBottom = '10px';
+                    catTitle.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+                    list.appendChild(catTitle);
+
+                    byLevel[level][cat].forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'wrong-item';
+                        div.innerHTML = `
+                            <div class="wrong-question">Qz: ${item.kanji} (${item.hiragana})</div>
+                            <div class="wrong-answer incorrect">✗ ${item.wrongAnswer_si} (${item.wrongAnswer_en})</div>
+                            <div class="wrong-answer correct">✓ ${item.correctAnswer_si} (${item.correctAnswer_en})</div>
+                        `;
+                        list.appendChild(div);
+                    });
                 });
             });
         }
@@ -976,6 +1098,7 @@
                 sessionStartTime = new Date();
                 saveProgress();
                 updateScore();
+                updateLevelStats();
                 updateCategoryStats();
                 loadQuestion();
                 
@@ -991,6 +1114,7 @@
                 date: new Date().toISOString(),
                 startTime: sessionStartTime,
                 endTime: new Date(),
+                level: currentLevel,
                 category: currentCategory,
                 totalQuestions: totalQuestions,
                 correctAnswers: correctAnswers,
@@ -1043,6 +1167,7 @@
                 const duration = Math.round((new Date(session.endTime) - new Date(session.startTime)) / 1000 / 60);
                 
                 md += `### Test ${index + 1} - ${date.toLocaleDateString()} ${date.toLocaleTimeString()}\n\n`;
+                md += `- **Level**: ${session.level}\n`;
                 md += `- **Category**: ${session.category}\n`;
                 md += `- **Duration**: ${duration} minutes\n`;
                 md += `- **Questions**: ${session.totalQuestions}\n`;
@@ -1051,11 +1176,11 @@
 
                 if (session.wrongAnswers && session.wrongAnswers.length > 0) {
                     md += `#### Wrong Answers\n\n`;
-                    md += `| Kanji | Hiragana | Your Answer | Correct Answer | Category |\n`;
-                    md += `|-------|----------|-------------|----------------|----------|\n`;
+                    md += `| Kanji | Hiragana | Your Answer | Correct Answer | Level | Category |\n`;
+                    md += `|-------|----------|-------------|----------------|-------|----------|\n`;
                     
                     session.wrongAnswers.forEach(wa => {
-                        md += `| ${wa.kanji} | ${wa.hiragana} | ${wa.wrongAnswer_si} (${wa.wrongAnswer_en}) | ${wa.correctAnswer_si} (${wa.correctAnswer_en}) | ${wa.category} |\n`;
+                        md += `| ${wa.kanji} | ${wa.hiragana} | ${wa.wrongAnswer_si} (${wa.wrongAnswer_en}) | ${wa.correctAnswer_si} (${wa.correctAnswer_en}) | ${wa.level || 'N/A'} | ${wa.category} |\n`;
                     });
                     md += `\n`;
                 }
@@ -1121,7 +1246,7 @@
                 const date = new Date(session.date);
                 html += `<div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 10px;">`;
                 html += `<p><strong>${date.toLocaleDateString()} ${date.toLocaleTimeString()}</strong></p>`;
-                html += `<p>Category: ${session.category} | Questions: ${session.totalQuestions} | Accuracy: ${session.accuracy}%</p>`;
+                html += `<p>Level: ${session.level || 'N/A'} | Category: ${session.category} | Questions: ${session.totalQuestions} | Accuracy: ${session.accuracy}%</p>`;
                 html += `</div>`;
             });
 
