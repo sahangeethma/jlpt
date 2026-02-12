@@ -427,7 +427,7 @@
     <div class="header">
         <div class="logo">QUIZZER</div>
         <div class="header-icons">
-            <span onclick="toggleQuizDirection()" title="Switch Quiz Direction" id="directionToggle">🇯🇵→🇱🇰</span>
+            <span onclick="toggleQuizDirection()" title="Switch Quiz Direction" id="directionToggle">🇱🇰</span>
             <span onclick="showUpload()" title="Upload Database">📁</span>
             <span onclick="toggleWrongAnswers()" title="Wrong Answers">📊</span>
             <span onclick="exportHistory()" title="Export History">💾</span>
@@ -710,11 +710,11 @@
         function toggleQuizDirection() {
             if (quizDirection === 'jp-to-si') {
                 quizDirection = 'si-to-jp';
-                document.getElementById('directionToggle').textContent = '🇱🇰→🇯🇵';
+                document.getElementById('directionToggle').textContent = '🇯🇵';
                 document.getElementById('directionToggle').title = 'Sinhala to Japanese';
             } else {
                 quizDirection = 'jp-to-si';
-                document.getElementById('directionToggle').textContent = '🇯🇵→🇱🇰';
+                document.getElementById('directionToggle').textContent = '🇱🇰';
                 document.getElementById('directionToggle').title = 'Japanese to Sinhala';
             }
             
