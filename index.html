@@ -428,6 +428,7 @@
     <div class="header">
         <div class="logo">QUIZZER</div>
         <div class="header-icons">
+            <span onclick="toggleQuizDirection()" title="Switch Quiz Direction" id="directionToggle">🇯🇵→🇱🇰</span>
             <span onclick="showUpload()" title="Upload Database">📁</span>
             <span onclick="toggleWrongAnswers()" title="Wrong Answers">📊</span>
             <span onclick="exportHistory()" title="Export History">💾</span>
@@ -489,7 +490,7 @@
         <div class="speaker-icon" onclick="playAudio()" title="Play pronunciation">🔊</div>
         <div class="kanji" id="kanji">準備中</div>
         <div class="hiragana" id="hiragana"></div>
-        <div class="instruction">Select the correct translation:</div>
+        <div class="instruction" id="instruction">Select the correct translation:</div>
         <div class="options" id="options"></div>
     </div>
 
@@ -616,6 +617,7 @@
         let currentLevel = 'all';
         let testHistory = [];
         let sessionStartTime = null;
+        let quizDirection = 'jp-to-si'; // 'jp-to-si' or 'si-to-jp'
 
         // Convert new format to flat array
         function convertDatabase(data) {
@@ -704,6 +706,21 @@
                 event.target.value = ''; // Clear the input for next upload
             };
             reader.readAsText(file);
+        }
+
+        function toggleQuizDirection() {
+            if (quizDirection === 'jp-to-si') {
+                quizDirection = 'si-to-jp';
+                document.getElementById('directionToggle').textContent = '🇱🇰→🇯🇵';
+                document.getElementById('directionToggle').title = 'Sinhala to Japanese';
+            } else {
+                quizDirection = 'jp-to-si';
+                document.getElementById('directionToggle').textContent = '🇯🇵→🇱🇰';
+                document.getElementById('directionToggle').title = 'Japanese to Sinhala';
+            }
+            
+            saveProgress();
+            loadQuestion();
         }
 
         function showUpload() {
@@ -844,8 +861,19 @@
                 answeredQuestions = data.answeredQuestions || [];
                 currentCategory = data.currentCategory || 'all';
                 currentLevel = data.currentLevel || 'all';
+                quizDirection = data.quizDirection || 'jp-to-si';
+                
                 document.getElementById('categorySelect').value = currentCategory;
                 document.getElementById('levelSelect').value = currentLevel;
+                
+                // Update direction toggle icon
+                if (quizDirection === 'si-to-jp') {
+                    document.getElementById('directionToggle').textContent = '🇱🇰→🇯🇵';
+                    document.getElementById('directionToggle').title = 'Sinhala to Japanese';
+                } else {
+                    document.getElementById('directionToggle').textContent = '🇯🇵→🇱🇰';
+                    document.getElementById('directionToggle').title = 'Japanese to Sinhala';
+                }
             }
 
             const savedWrong = localStorage.getItem('jlptWrongAnswers');
@@ -864,7 +892,8 @@
                 totalQuestions,
                 answeredQuestions,
                 currentCategory,
-                currentLevel
+                currentLevel,
+                quizDirection
             }));
 
             localStorage.setItem('jlptWrongAnswers', JSON.stringify(wrongAnswersList));
@@ -903,9 +932,18 @@
             currentIndex = available[randomIndex];
             currentQuestion = database[currentIndex];
 
-            // Display question
-            document.getElementById('kanji').textContent = currentQuestion.kanji;
-            document.getElementById('hiragana').textContent = currentQuestion.hiragana;
+            // Display question based on direction
+            if (quizDirection === 'jp-to-si') {
+                // Japanese to Sinhala (show kanji, ask for Sinhala)
+                document.getElementById('kanji').textContent = currentQuestion.kanji;
+                document.getElementById('hiragana').textContent = currentQuestion.hiragana;
+                document.getElementById('instruction').textContent = 'Select the correct translation:';
+            } else {
+                // Sinhala to Japanese (show Sinhala, ask for Japanese)
+                document.getElementById('kanji').textContent = currentQuestion.meaning_si;
+                document.getElementById('hiragana').textContent = currentQuestion.meaning_en;
+                document.getElementById('instruction').textContent = 'Select the correct Japanese word:';
+            }
 
             // Generate options
             generateOptions();
@@ -913,21 +951,45 @@
 
         function generateOptions() {
             const filtered = getFilteredDatabase();
-            const options = [{
-                si: currentQuestion.meaning_si,
-                en: currentQuestion.meaning_en
-            }];
+            let options = [];
             
-            // Add 3 random wrong answers from same category
-            const otherWords = filtered.filter(w => w.meaning_si !== currentQuestion.meaning_si);
-            while (options.length < 4 && otherWords.length >= 3) {
-                const random = otherWords[Math.floor(Math.random() * otherWords.length)];
-                const opt = {
-                    si: random.meaning_si,
-                    en: random.meaning_en
-                };
-                if (!options.find(o => o.si === opt.si)) {
-                    options.push(opt);
+            if (quizDirection === 'jp-to-si') {
+                // Japanese to Sinhala mode
+                options = [{
+                    si: currentQuestion.meaning_si,
+                    en: currentQuestion.meaning_en
+                }];
+                
+                // Add 3 random wrong answers from same category
+                const otherWords = filtered.filter(w => w.meaning_si !== currentQuestion.meaning_si);
+                while (options.length < 4 && otherWords.length >= 3) {
+                    const random = otherWords[Math.floor(Math.random() * otherWords.length)];
+                    const opt = {
+                        si: random.meaning_si,
+                        en: random.meaning_en
+                    };
+                    if (!options.find(o => o.si === opt.si)) {
+                        options.push(opt);
+                    }
+                }
+            } else {
+                // Sinhala to Japanese mode
+                options = [{
+                    kanji: currentQuestion.kanji,
+                    hiragana: currentQuestion.hiragana
+                }];
+                
+                // Add 3 random wrong answers from same category
+                const otherWords = filtered.filter(w => w.kanji !== currentQuestion.kanji);
+                while (options.length < 4 && otherWords.length >= 3) {
+                    const random = otherWords[Math.floor(Math.random() * otherWords.length)];
+                    const opt = {
+                        kanji: random.kanji,
+                        hiragana: random.hiragana
+                    };
+                    if (!options.find(o => o.kanji === opt.kanji)) {
+                        options.push(opt);
+                    }
                 }
             }
 
@@ -941,11 +1003,21 @@
             options.forEach(option => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
-                btn.innerHTML = `
-                    <div class="option-main">${option.si}</div>
-                    <div class="option-sub">${option.en}</div>
-                `;
-                btn.onclick = () => checkAnswer(option.si, btn);
+                
+                if (quizDirection === 'jp-to-si') {
+                    btn.innerHTML = `
+                        <div class="option-main">${option.si}</div>
+                        <div class="option-sub">${option.en}</div>
+                    `;
+                    btn.onclick = () => checkAnswer(option.si, btn);
+                } else {
+                    btn.innerHTML = `
+                        <div class="option-main">${option.kanji}</div>
+                        <div class="option-sub">${option.hiragana}</div>
+                    `;
+                    btn.onclick = () => checkAnswer(option.kanji, btn);
+                }
+                
                 optionsContainer.appendChild(btn);
             });
         }
@@ -954,7 +1026,16 @@
             const allButtons = document.querySelectorAll('.option-btn');
             allButtons.forEach(btn => btn.disabled = true);
 
-            const isCorrect = selected === currentQuestion.meaning_si;
+            let isCorrect = false;
+            let correctAnswer = '';
+            
+            if (quizDirection === 'jp-to-si') {
+                isCorrect = selected === currentQuestion.meaning_si;
+                correctAnswer = currentQuestion.meaning_si;
+            } else {
+                isCorrect = selected === currentQuestion.kanji;
+                correctAnswer = currentQuestion.kanji;
+            }
 
             // Mark current button
             button.classList.add(isCorrect ? 'correct' : 'wrong');
@@ -963,23 +1044,34 @@
             if (!isCorrect) {
                 allButtons.forEach(btn => {
                     const mainText = btn.querySelector('.option-main').textContent;
-                    if (mainText === currentQuestion.meaning_si) {
+                    if (mainText === correctAnswer) {
                         btn.classList.add('correct');
                     }
                 });
 
                 // Add to wrong answers
+                let wrongAnswer_main = '';
+                let wrongAnswer_sub = '';
+                
+                const wrongBtn = Array.from(allButtons).find(b => 
+                    b.querySelector('.option-main').textContent === selected
+                );
+                
+                if (wrongBtn) {
+                    wrongAnswer_main = wrongBtn.querySelector('.option-main').textContent;
+                    wrongAnswer_sub = wrongBtn.querySelector('.option-sub').textContent;
+                }
+                
                 wrongAnswersList.push({
                     kanji: currentQuestion.kanji,
                     hiragana: currentQuestion.hiragana,
-                    wrongAnswer_si: selected,
-                    wrongAnswer_en: allButtons[Array.from(allButtons).findIndex(b => 
-                        b.querySelector('.option-main').textContent === selected
-                    )].querySelector('.option-sub').textContent,
-                    correctAnswer_si: currentQuestion.meaning_si,
-                    correctAnswer_en: currentQuestion.meaning_en,
+                    meaning_si: currentQuestion.meaning_si,
+                    meaning_en: currentQuestion.meaning_en,
+                    wrongAnswer_main: wrongAnswer_main,
+                    wrongAnswer_sub: wrongAnswer_sub,
                     category: currentQuestion.category,
                     level: currentQuestion.level,
+                    direction: quizDirection,
                     timestamp: new Date().toISOString()
                 });
             }
@@ -1065,11 +1157,24 @@
                     byLevel[level][cat].forEach(item => {
                         const div = document.createElement('div');
                         div.className = 'wrong-item';
-                        div.innerHTML = `
-                            <div class="wrong-question">Qz: ${item.kanji} (${item.hiragana})</div>
-                            <div class="wrong-answer incorrect">✗ ${item.wrongAnswer_si} (${item.wrongAnswer_en})</div>
-                            <div class="wrong-answer correct">✓ ${item.correctAnswer_si} (${item.correctAnswer_en})</div>
-                        `;
+                        
+                        const direction = item.direction || 'jp-to-si';
+                        const directionLabel = direction === 'jp-to-si' ? '🇯🇵→🇱🇰' : '🇱🇰→🇯🇵';
+                        
+                        if (direction === 'jp-to-si') {
+                            div.innerHTML = `
+                                <div class="wrong-question">${directionLabel} Qz: ${item.kanji} (${item.hiragana})</div>
+                                <div class="wrong-answer incorrect">✗ ${item.wrongAnswer_main} (${item.wrongAnswer_sub})</div>
+                                <div class="wrong-answer correct">✓ ${item.meaning_si} (${item.meaning_en})</div>
+                            `;
+                        } else {
+                            div.innerHTML = `
+                                <div class="wrong-question">${directionLabel} Qz: ${item.meaning_si} (${item.meaning_en})</div>
+                                <div class="wrong-answer incorrect">✗ ${item.wrongAnswer_main} (${item.wrongAnswer_sub})</div>
+                                <div class="wrong-answer correct">✓ ${item.kanji} (${item.hiragana})</div>
+                            `;
+                        }
+                        
                         list.appendChild(div);
                     });
                 });
@@ -1116,6 +1221,7 @@
                 endTime: new Date(),
                 level: currentLevel,
                 category: currentCategory,
+                direction: quizDirection,
                 totalQuestions: totalQuestions,
                 correctAnswers: correctAnswers,
                 accuracy: ((correctAnswers / totalQuestions) * 100).toFixed(1),
@@ -1166,9 +1272,12 @@
                 const date = new Date(session.date);
                 const duration = Math.round((new Date(session.endTime) - new Date(session.startTime)) / 1000 / 60);
                 
+                const directionLabel = session.direction === 'jp-to-si' ? 'Japanese→Sinhala' : 'Sinhala→Japanese';
+                
                 md += `### Test ${index + 1} - ${date.toLocaleDateString()} ${date.toLocaleTimeString()}\n\n`;
                 md += `- **Level**: ${session.level}\n`;
                 md += `- **Category**: ${session.category}\n`;
+                md += `- **Direction**: ${directionLabel}\n`;
                 md += `- **Duration**: ${duration} minutes\n`;
                 md += `- **Questions**: ${session.totalQuestions}\n`;
                 md += `- **Correct**: ${session.correctAnswers}\n`;
@@ -1176,11 +1285,16 @@
 
                 if (session.wrongAnswers && session.wrongAnswers.length > 0) {
                     md += `#### Wrong Answers\n\n`;
-                    md += `| Kanji | Hiragana | Your Answer | Correct Answer | Level | Category |\n`;
-                    md += `|-------|----------|-------------|----------------|-------|----------|\n`;
+                    md += `| Question | Your Answer | Correct Answer | Level | Category | Direction |\n`;
+                    md += `|----------|-------------|----------------|-------|----------|----------|\n`;
                     
                     session.wrongAnswers.forEach(wa => {
-                        md += `| ${wa.kanji} | ${wa.hiragana} | ${wa.wrongAnswer_si} (${wa.wrongAnswer_en}) | ${wa.correctAnswer_si} (${wa.correctAnswer_en}) | ${wa.level || 'N/A'} | ${wa.category} |\n`;
+                        const dir = wa.direction || 'jp-to-si';
+                        const dirLabel = dir === 'jp-to-si' ? '🇯🇵→🇱🇰' : '🇱🇰→🇯🇵';
+                        const question = dir === 'jp-to-si' ? `${wa.kanji} (${wa.hiragana})` : `${wa.meaning_si} (${wa.meaning_en})`;
+                        const correct = dir === 'jp-to-si' ? `${wa.meaning_si} (${wa.meaning_en})` : `${wa.kanji} (${wa.hiragana})`;
+                        
+                        md += `| ${question} | ${wa.wrongAnswer_main} (${wa.wrongAnswer_sub}) | ${correct} | ${wa.level || 'N/A'} | ${wa.category} | ${dirLabel} |\n`;
                     });
                     md += `\n`;
                 }
@@ -1244,9 +1358,10 @@
             html += `<h3>Recent Sessions</h3>`;
             testHistory.slice(-5).reverse().forEach((session, index) => {
                 const date = new Date(session.date);
+                const dirLabel = session.direction === 'jp-to-si' ? '🇯🇵→🇱🇰' : '🇱🇰→🇯🇵';
                 html += `<div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 10px;">`;
                 html += `<p><strong>${date.toLocaleDateString()} ${date.toLocaleTimeString()}</strong></p>`;
-                html += `<p>Level: ${session.level || 'N/A'} | Category: ${session.category} | Questions: ${session.totalQuestions} | Accuracy: ${session.accuracy}%</p>`;
+                html += `<p>${dirLabel} | Level: ${session.level || 'N/A'} | Category: ${session.category} | Questions: ${session.totalQuestions} | Accuracy: ${session.accuracy}%</p>`;
                 html += `</div>`;
             });
 
